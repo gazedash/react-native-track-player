@@ -69,6 +69,10 @@ public class AudioPlayer: AVPlayerWrapperDelegate {
     public var currentTime: Double {
         return wrapper.currentTime
     }
+
+    public var availableDuration: CMTime {
+        return wrapper.availableDuration
+    }
     
     /**
      The duration of the current AudioItem.

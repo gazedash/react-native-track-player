@@ -16,6 +16,8 @@ protocol AVPlayerWrapperProtocol {
     var currentItem: AVPlayerItem? { get }
     
     var currentTime: TimeInterval { get }
+
+    var availableDuration: CMTime { get }
     
     var duration: TimeInterval { get }
     

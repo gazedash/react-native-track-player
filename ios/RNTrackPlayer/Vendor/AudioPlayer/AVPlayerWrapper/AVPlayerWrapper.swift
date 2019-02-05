@@ -88,6 +88,13 @@ class AVPlayerWrapper: AVPlayerWrapperProtocol {
         set { avPlayer.automaticallyWaitsToMinimizeStalling = newValue }
     }
 
+    var availableDuration: CMTime {
+        if let range = currentItem?.loadedTimeRanges.first {
+            return CMTimeRangeGetEnd(range.timeRangeValue)
+        }
+        return kCMTimeZero
+    }
+
     var currentTime: TimeInterval {
         let seconds = avPlayer.currentTime().seconds
         return seconds.isNaN ? 0 : seconds
@@ -96,8 +103,7 @@ class AVPlayerWrapper: AVPlayerWrapperProtocol {
     var duration: TimeInterval {
         if let seconds = currentItem?.asset.duration.seconds, !seconds.isNaN {
             return seconds
-        }
-        else if let seconds = currentItem?.duration.seconds, !seconds.isNaN {
+        } else if let seconds = currentItem?.duration.seconds, !seconds.isNaN {
             return seconds
         } else if let seconds = currentItem?.loadedTimeRanges.first?.timeRangeValue.duration.seconds,
             !seconds.isNaN {
@@ -157,6 +163,12 @@ class AVPlayerWrapper: AVPlayerWrapperProtocol {
         avPlayer.seek(to: CMTimeMakeWithSeconds(seconds, preferredTimescale: 1)) { finished in
             delegate?.AVWrapper(seekTo: Int(seconds), didFinish: finished)
         }
+    }
+
+    func dvAssetLoaderDelegate(_: DVAssetLoaderDelegate?, didLoad data: Data?, for url: URL?) {
+        videoCache.storeItem(data, forUri: url?.absoluteString, withCallback: { _ in
+            DebugLog("Cache data stored successfully ")
+        })
     }
 
     func playerItemForSource(source: NSDictionary!, withCallback handler: (AVPlayerItem!) -> Void) {

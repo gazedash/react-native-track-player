@@ -425,12 +425,13 @@ public class RNTrackPlayer: RCTEventEmitter, AudioPlayerDelegate {
     
     @objc(getBufferedPosition:rejecter:)
     public func getBufferedPosition(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        resolve(0)
+        // resolve(player.availableDuration)
+        resolve(5)
     }
     
     @objc(getPosition:rejecter:)
     public func getPosition(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        resolve(player.currentTime)
+        resolve(5)
     }
     
     @objc(getState:rejecter:)
